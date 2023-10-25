@@ -1,0 +1,51 @@
+import { DatabasePostgres } from "./database-postgres.js"
+import fastify from "fastify";
+import cors from "fastify-cors";
+
+const server = fastify({ logger: true })
+const database = new DatabasePostgres()
+
+server.register(cors, {
+    origin: 'http://localhost:4200', 
+});
+
+server.post('/usuarios', async (request, reply) => {
+    const { username, password, avatar, musicas } = request.body
+    await database.criarUsuario({
+        username: username,
+        password: password,
+        avatar: avatar,                     
+        musicas: musicas
+    })
+    return reply.status(201).send()
+})
+
+server.get('/usuarios', async (request, reply) => {
+    const usuarios = await database.buscarUsuarios()
+    return usuarios
+})
+
+server.get('/usuarios/:id', async (request, reply) => {
+  const userID = request.params.id;
+  const infosUsuario = await database.buscarInfosUsuario(userID)
+  return infosUsuario
+})
+
+server.put('/usuarios/:id', async (request, reply) => {
+  const { userID, musicasUsuario } = request.body
+  await database.atualizarMusicasUsuario(userID, musicasUsuario)
+  return reply.status(201).send()
+})
+
+/*server.listen(3333, "0.0.0.0", (err, address) => {
+  if (err) {
+    server.log.error(err);
+    process.exit(1);
+  }
+  console.log(`Servidor rodando em ${address}.`);
+});*/
+
+server.listen({
+  host: '0.0.0.0',
+  port: process.env.PORT ?? 3333
+})
