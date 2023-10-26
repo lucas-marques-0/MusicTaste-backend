@@ -6,7 +6,8 @@ const server = fastify({ logger: true })
 const database = new DatabasePostgres()
 
 server.register(cors, {
-    origin: 'http://localhost:4200', 
+  origin: 'https://musictasteshare.vercel.app', 
+  // origin: 'http://localhost:4200', 
 });
 
 server.post('/usuarios', async (request, reply) => {
