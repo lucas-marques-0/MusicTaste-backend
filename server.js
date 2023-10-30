@@ -1,6 +1,7 @@
 import { DatabasePostgres } from "./database-postgres.js"
 import fastify from "fastify";
 import cors from "fastify-cors";
+const bcrypt = require('bcrypt');
 
 const server = fastify({ logger: true })
 const database = new DatabasePostgres()
@@ -11,29 +12,21 @@ server.register(cors, {
 });
 
 server.post('/usuarios', async (request, reply) => {
-    const { username, password, avatar, musicas } = request.body
+    const { username, password, avatar, musicas } = request.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
     await database.criarUsuario({
         username: username,
-        password: password,
+        password: hashedPassword,
         avatar: avatar,                     
         musicas: musicas
     })
     return reply.status(201).send()
 })
 
-/* server.get('/usuarios', async (request, reply) => {
+server.get('/usuarios', async (request, reply) => {
     const usuarios = await database.buscarUsuarios()
     return usuarios
-}) */
-
-server.get('/usuarios', async (request, reply) => {
-  const usuarios = await database.buscarUsuarios();
-  const usuariosSemSenha = usuarios.map(usuario => {
-    const { senha, ...usuarioSemSenha } = usuario;
-    return usuarioSemSenha;
-  });
-  return usuariosSemSenha;
-});
+})
 
 server.get('/usuarios/:id', async (request, reply) => {
   const userID = request.params.id;
