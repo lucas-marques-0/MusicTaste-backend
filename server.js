@@ -1,7 +1,6 @@
 import { DatabasePostgres } from "./database-postgres.js"
 import fastify from "fastify";
 import cors from "fastify-cors";
-const bcrypt = require('bcrypt');
 
 const server = fastify({ logger: true })
 const database = new DatabasePostgres()
@@ -12,11 +11,10 @@ server.register(cors, {
 });
 
 server.post('/usuarios', async (request, reply) => {
-    const { username, password, avatar, musicas } = request.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const { username, password, avatar, musicas } = request.body
     await database.criarUsuario({
         username: username,
-        password: hashedPassword,
+        password: password,
         avatar: avatar,                     
         musicas: musicas
     })
@@ -39,6 +37,14 @@ server.put('/usuarios/:id', async (request, reply) => {
   await database.atualizarMusicasUsuario(userID, musicasUsuario)
   return reply.status(201).send()
 })
+
+/*server.listen(3333, "0.0.0.0", (err, address) => {
+  if (err) {
+    server.log.error(err);
+    process.exit(1);
+  }
+  console.log(`Servidor rodando em ${address}.`);
+});*/
 
 server.listen({
   host: '0.0.0.0',
