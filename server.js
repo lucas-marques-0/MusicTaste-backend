@@ -21,10 +21,19 @@ server.post('/usuarios', async (request, reply) => {
     return reply.status(201).send()
 })
 
-server.get('/usuarios', async (request, reply) => {
+/* server.get('/usuarios', async (request, reply) => {
     const usuarios = await database.buscarUsuarios()
     return usuarios
-})
+}) */
+
+server.get('/usuarios', async (request, reply) => {
+  const usuarios = await database.buscarUsuarios();
+  const usuariosSemSenha = usuarios.map(usuario => {
+    const { senha, ...usuarioSemSenha } = usuario;
+    return usuarioSemSenha;
+  });
+  return usuariosSemSenha;
+});
 
 server.get('/usuarios/:id', async (request, reply) => {
   const userID = request.params.id;
@@ -37,14 +46,6 @@ server.put('/usuarios/:id', async (request, reply) => {
   await database.atualizarMusicasUsuario(userID, musicasUsuario)
   return reply.status(201).send()
 })
-
-/*server.listen(3333, "0.0.0.0", (err, address) => {
-  if (err) {
-    server.log.error(err);
-    process.exit(1);
-  }
-  console.log(`Servidor rodando em ${address}.`);
-});*/
 
 server.listen({
   host: '0.0.0.0',
