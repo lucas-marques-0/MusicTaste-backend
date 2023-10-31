@@ -10,7 +10,7 @@ server.register(cors, {
   // origin: 'http://localhost:4200', 
 });
 
-server.post('/usuarios', async (request, reply) => {
+server.post('/usuarios/criar', async (request, reply) => {
     const { username, password, avatar, musicas } = request.body
     await database.criarUsuario({
         username: username,
@@ -19,6 +19,12 @@ server.post('/usuarios', async (request, reply) => {
         musicas: musicas
     })
     return reply.status(201).send()
+})
+
+server.get('/usuarios/login', async (request, reply) => {
+  const username = request.query.username;
+  const infosUsuario = await database.retornarUserLogin(username)
+  return infosUsuario
 })
 
 server.get('/usuarios', async (request, reply) => {
@@ -37,14 +43,6 @@ server.put('/usuarios/:id', async (request, reply) => {
   await database.atualizarMusicasUsuario(userID, musicasUsuario)
   return reply.status(201).send()
 })
-
-/*server.listen(3333, "0.0.0.0", (err, address) => {
-  if (err) {
-    server.log.error(err);
-    process.exit(1);
-  }
-  console.log(`Servidor rodando em ${address}.`);
-});*/
 
 server.listen({
   host: '0.0.0.0',

@@ -18,6 +18,11 @@ export class DatabasePostgres {
         return infosUsuarios
     }
 
+    async retornarUserLogin(username) {
+        let infosUsuario = await sql `select * from usuarios where username = ${username}`
+        return infosUsuario
+    }
+
     async atualizarMusicasUsuario(id, musicasAtualizadas) {
         await sql `UPDATE usuarios SET musicas = ${musicasAtualizadas} WHERE id = ${id}`
     }
