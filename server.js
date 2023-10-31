@@ -21,21 +21,18 @@ server.post('/usuarios', async (request, reply) => {
     return reply.status(201).send()
 })
 
-server.get('/usuarios/login/:username', async (request, reply) => {
-  const username = request.params.username;
-  const infosUsuario = await database.retornarUserLogin(username)
-  return infosUsuario
-})
-
 server.get('/usuarios', async (request, reply) => {
     const usuarios = await database.buscarUsuarios()
     return usuarios
 })
 
-server.get('/usuarios/:id', async (request, reply) => {
-  const userID = request.params.id;
-  const infosUsuario = await database.buscarInfosUsuario(userID)
-  return infosUsuario
+server.get('/usuarios/:userInfo', async (request, reply) => {
+  const userInfo = request.params.userInfo;
+  if (userInfo == Number) {
+    return infosUsuario = await database.buscarInfoUsuarioID(userInfo)
+  } else {
+    return infosUsuario = await database.buscarInfoUsuarioUsername(userInfo)
+  }
 })
 
 server.put('/usuarios/:id', async (request, reply) => {

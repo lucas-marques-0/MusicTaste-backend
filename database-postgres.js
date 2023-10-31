@@ -13,12 +13,12 @@ export class DatabasePostgres {
         return usuarios
     }
 
-    async buscarInfosUsuario(userID) {
+    async buscarInfoUsuarioID(userID) {
         let infosUsuarios = await sql `select * from usuarios where id = ${userID}`
         return infosUsuarios
     }
 
-    async retornarUserLogin(username) {
+    async buscarInfoUsuarioUsername(username) {
         let infosUsuario = await sql `select * from usuarios where username = ${username}`
         return infosUsuario
     }
