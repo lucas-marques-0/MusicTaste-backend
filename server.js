@@ -10,7 +10,7 @@ server.register(cors, {
   // origin: 'http://localhost:4200', 
 });
 
-server.post('/usuarios/criar', async (request, reply) => {
+server.post('/usuarios', async (request, reply) => {
     const { username, password, avatar, musicas } = request.body
     await database.criarUsuario({
         username: username,
@@ -21,7 +21,7 @@ server.post('/usuarios/criar', async (request, reply) => {
     return reply.status(201).send()
 })
 
-server.get('/usuarios/login', async (request, reply) => {
+server.get('/login', async (request, reply) => {
   const username = request.query.username;
   const infosUsuario = await database.retornarUserLogin(username)
   return infosUsuario
