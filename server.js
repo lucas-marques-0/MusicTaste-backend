@@ -21,8 +21,8 @@ server.post('/usuarios', async (request, reply) => {
     return reply.status(201).send()
 })
 
-server.get('/usuarios/login', async (request, reply) => {
-  const username = request.query.username;
+server.get('/usuarios/login/:username', async (request, reply) => {
+  const username = request.params.username;
   const infosUsuario = await database.retornarUserLogin(username)
   return infosUsuario
 })
