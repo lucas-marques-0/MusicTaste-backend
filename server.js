@@ -28,7 +28,7 @@ server.get('/usuarios', async (request, reply) => {
 
 server.get('/usuarios/:userInfo', async (request, reply) => {
   const userInfo = request.params.userInfo;
-  if (userInfo == Number) {
+  if (userInfo.lenght > 15) {
     return infosUsuario = await database.buscarInfoUsuarioID(userInfo)
   } else {
     return infosUsuario = await database.buscarInfoUsuarioUsername(userInfo)
