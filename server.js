@@ -11,9 +11,10 @@ server.register(cors, {
 });
 
 server.post('/usuarios', async (request, reply) => {
-    const { username, password, avatar, musicas } = request.body
+    const { username, email, password, avatar, musicas } = request.body
     await database.criarUsuario({
         username: username,
+        email: email,
         password: password,
         avatar: avatar,                     
         musicas: musicas

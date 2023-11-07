@@ -4,6 +4,7 @@ import { sql } from "./db.js";
     CREATE TABLE usuarios (
         id TEXT PRIMARY KEY,
         username TEXT,
+        email TEXT,
         password TEXT,
         avatar TEXT,
         musicas JSON[]   
