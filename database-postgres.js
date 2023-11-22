@@ -4,8 +4,8 @@ import { sql } from "./db.js"
 export class DatabasePostgres {
     async criarUsuario(usuario) {
         const usuarioId = randomUUID()
-        const { username, password, avatar, musicas } = usuario
-        await sql `insert into usuarios (id, username, password, avatar, musicas) VALUES (${usuarioId}, ${username}, ${password}, ${avatar}, ${musicas})`
+        const { username, email, password, avatar, musicas } = usuario
+        await sql `insert into usuarios (id, username, email, password, avatar, musicas) VALUES (${usuarioId}, ${username}, ${email}, ${password}, ${avatar}, ${musicas})`
     }
 
     async buscarUsuarios() {
