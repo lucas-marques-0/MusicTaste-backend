@@ -13,14 +13,9 @@ export class DatabasePostgres {
         return usuarios
     }
 
-    async buscarInfoUsuarioID(userID) {
+    async buscarUsuarioID(userID) {
         let infosUsuarios = await sql `select * from usuarios where id = ${userID}`
         return infosUsuarios
-    }
-
-    async buscarInfoUsuarioUsername(username) {
-        let infosUsuario = await sql `select * from usuarios where username = ${username}`
-        return infosUsuario
     }
 
     async atualizarMusicasUsuario(id, musicasAtualizadas) {

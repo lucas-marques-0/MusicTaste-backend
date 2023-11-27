@@ -27,13 +27,10 @@ server.get('/usuarios', async (request, reply) => {
     return usuarios
 })
 
-server.get('/usuarios/:userInfo', async (request, reply) => {
-  const userInfo = request.params.userInfo;
-  if (userInfo.lenght > 15) {
-    return infosUsuario = await database.buscarInfoUsuarioID(userInfo)
-  } else {
-    return infosUsuario = await database.buscarInfoUsuarioUsername(userInfo)
-  }
+server.get('/usuarios/:id', async (request, reply) => {
+  const userID = request.params.id;
+  const userInfo = await database.buscarUsuarioID(userID)
+  return userInfo
 })
 
 server.put('/usuarios/:id', async (request, reply) => {
