@@ -28,12 +28,12 @@ server.post('/usuarios/login', async (request, reply) => {
   const { userID, password } = request.body
   const userInfo = await database.buscarUsuarioID(userID)
   const loginPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex)
+  console.log(userID, password, userInfo, loginPassword)
   if(userInfo.password === loginPassword){
     const token = jwt.sign({ id: userInfo.id, email: userInfo.email }, "segredo-do-jwt", { expiresIn: "1d" });
-    user.password = undefined;
     return reply.status(201).send({ token, user: userInfo });
   } else {
-    return reply.status(401).send({ error: 'Invalid credentials' });
+    return reply.status(401).send({ error: 'Credenciais inválidas.' });
   }
   //return reply.status(201).send()
 })
