@@ -12,6 +12,8 @@ server.register(cors, {
 });
 
 server.post('/usuarios', async (request, reply) => {
+  const { action } = request.body
+  if(action == 'cadastro') {
     const { username, email, password, avatar, musicas } = request.body
     await database.criarUsuario({
         username: username,
@@ -21,20 +23,18 @@ server.post('/usuarios', async (request, reply) => {
         musicas: musicas
     })
     return reply.status(201).send()
-})
-
-server.post('usuarios/login', async (request, reply) => {
-  const { userID, password } = request.body
-  const userInfo = await database.buscarUsuarioID(userID)
-  const loginPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex)
-  console.log(userID, password, userInfo, loginPassword)
-  if(userInfo.password === loginPassword){
-    const token = jwt.sign({ id: userInfo.id, email: userInfo.email }, "segredo-do-jwt", { expiresIn: "1d" });
-    return reply.status(201).send({ token, user: userInfo });
   } else {
-    return reply.status(401).send({ error: 'Credenciais inválidas.' });
+    const { userID, password } = request.body
+    const userInfo = await database.buscarUsuarioID(userID)
+    const loginPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex)
+    console.log(userID, password, userInfo, loginPassword)
+    if (userInfo.password === loginPassword) {
+      const token = jwt.sign({ id: userInfo.id, email: userInfo.email }, "segredo-do-jwt", { expiresIn: "1d" });
+      return reply.status(201).send({ token, user: userInfo });
+    } else {
+      return reply.status(401).send({ error: 'Credenciais inválidas.' });
+    }
   }
-  //return reply.status(201).send()
 })
 
 server.get('/usuarios', async (request, reply) => {
