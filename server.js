@@ -32,7 +32,7 @@ server.post('/usuarios', async (request, reply) => {
       const token = jwt.sign({ id: userInfo.id, email: userInfo.email }, "segredo-do-jwt", { expiresIn: "1d" });
       return reply.status(201).send({ token, user: userInfo });
     } else {
-      return reply.status(401).send({ error: 'Credenciais inválidas.' });
+      return reply.status(401).send({ error: 'Credenciais inválidas.', teste: { userID } });
     }
   }
 })
