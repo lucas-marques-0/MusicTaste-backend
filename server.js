@@ -27,11 +27,12 @@ server.post('/usuarios', async (request, reply) => {
   if(action == 'login') {
     const { userID, password } = request.body
     const userInfo = await database.buscarUsuarioID(userID)
-    if (userInfo.password == password) {
+    const userPassword = userInfo.password
+    if (userPassword == password) {
       const token = jwt.sign({ id: userInfo.id, email: userInfo.email }, "segredo-do-jwt", { expiresIn: "1d" });
       return reply.status(201).send({ token, user: userInfo });
     } else {
-      return reply.status(401).send({ error: 'Credenciais inválidas.', teste: { userID } });
+      return reply.status(401).send({ error: 'Credenciais inválidas.', infos: { userID, password, userInfo, userPassword } });
     }
   }
 })
