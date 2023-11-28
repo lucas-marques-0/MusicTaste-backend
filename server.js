@@ -24,7 +24,7 @@ server.post('/usuarios', async (request, reply) => {
     return reply.status(201).send()
 })
 
-server.post('/usuarios', async (request, reply) => {
+server.post('/login', async (request, reply) => {
   const { userID, password } = request.body
   const userInfo = await database.buscarUsuarioID(userID)
   const loginPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex)
