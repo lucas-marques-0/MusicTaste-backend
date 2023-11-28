@@ -27,7 +27,7 @@ server.post('/usuarios', async (request, reply) => {
   if(action == 'login') {
     const { userID, password } = request.body
     const userInfo = await database.buscarUsuarioID(userID)
-    const userPassword = userInfo.password
+    const userPassword = userInfo[0].password
     if (userPassword == password) {
       const token = jwt.sign({ id: userInfo.id, email: userInfo.email }, "segredo-do-jwt", { expiresIn: "1d" });
       return reply.status(201).send({ token, user: userInfo });
