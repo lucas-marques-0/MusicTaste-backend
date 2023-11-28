@@ -25,8 +25,11 @@ server.post('/usuarios', async (request, reply) => {
     return reply.status(201).send()
   } 
   if(action == 'login') {
+    console.log(request.body)
     const { userID, password } = request.body
+    console.log(userID, password)
     const userInfo = await database.buscarUsuarioID(userID)
+    console.log(userInfo)
     const loginPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex)
     console.log(userID, password, userInfo, loginPassword)
     if (userInfo.password === loginPassword) {
