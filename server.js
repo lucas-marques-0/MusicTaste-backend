@@ -27,7 +27,8 @@ server.post('/usuarios', async (request, reply) => {
   if(action == 'login') {
     const { userID, password } = request.body
     const userInfo = await database.buscarUsuarioID(userID)
-    const loginPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
+    //const loginPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
+    const loginPassword = crypto.SHA256(password).toString(crypto.enc.Hex);
     if (userInfo.password === loginPassword) {
       const token = jwt.sign({ id: userInfo.id, email: userInfo.email }, "segredo-do-jwt", { expiresIn: "1d" });
       return reply.status(201).send({ token, user: userInfo });
