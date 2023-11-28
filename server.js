@@ -23,7 +23,8 @@ server.post('/usuarios', async (request, reply) => {
         musicas: musicas
     })
     return reply.status(201).send()
-  } else {
+  } 
+  if(action == 'login') {
     const { userID, password } = request.body
     const userInfo = await database.buscarUsuarioID(userID)
     const loginPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex)
