@@ -2,7 +2,8 @@ import { DatabasePostgres } from "./database-postgres.js"
 import fastify from "fastify";
 import cors from "fastify-cors";
 import CryptoJS from "crypto-js";
-import * as jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
+
 
 const server = fastify({ logger: true })
 const database = new DatabasePostgres()
