@@ -25,17 +25,14 @@ server.post('/usuarios', async (request, reply) => {
     return reply.status(201).send()
   } 
   if(action == 'login') {
-    console.log(request.body)
     const { userID, password } = request.body
-    console.log(userID, password)
     const userInfo = await database.buscarUsuarioID(userID)
-    console.log(userInfo)
     const loginPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex)
-    console.log(userID, password, userInfo, loginPassword)
     if (userInfo.password === loginPassword) {
       const token = jwt.sign({ id: userInfo.id, email: userInfo.email }, "segredo-do-jwt", { expiresIn: "1d" });
       return reply.status(201).send({ token, user: userInfo });
     } else {
+      console.log(userID, password, userInfo, loginPassword)
       return reply.status(401).send({ error: 'Credenciais inválidas.' });
     }
   }
