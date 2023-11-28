@@ -6,7 +6,6 @@ import * as jwt from "jsonwebtoken";
 
 const server = fastify({ logger: true })
 const database = new DatabasePostgres()
-
 server.register(cors, {
   origin: 'https://musictasteshare.vercel.app', 
   // origin: 'http://localhost:4200', 
@@ -24,7 +23,7 @@ server.post('/usuarios', async (request, reply) => {
     return reply.status(201).send()
 })
 
-server.post('/login', async (request, reply) => {
+server.post('usuarios/login', async (request, reply) => {
   const { userID, password } = request.body
   const userInfo = await database.buscarUsuarioID(userID)
   const loginPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex)
