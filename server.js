@@ -38,9 +38,12 @@ server.post('/usuarios', async (request, reply) => {
 })
 
 server.get('/usuarios', async (request, reply) => {
-    const usuarios = await database.buscarUsuarios()
-    const usuariosObject = usuarios.map(({ password, ...userObject }) => userObject);
-    return usuariosObject
+    const users = await database.buscarUsuarios()
+    const userObjects = users.map(user => {
+      const { password, ...userObject } = user;
+      return userObject;
+    });
+    return userObjects
 })
 
 server.get('/usuarios/:id', async (request, reply) => {
