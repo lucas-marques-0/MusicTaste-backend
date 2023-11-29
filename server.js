@@ -3,7 +3,6 @@ import fastify from "fastify";
 import cors from "fastify-cors";
 import jwt from 'jsonwebtoken';
 
-
 const server = fastify({ logger: true })
 const database = new DatabasePostgres()
 server.register(cors, {
@@ -40,7 +39,8 @@ server.post('/usuarios', async (request, reply) => {
 
 server.get('/usuarios', async (request, reply) => {
     const usuarios = await database.buscarUsuarios()
-    return usuarios
+    const usuariosObject = usuarios.map(({ password, ...userObject }) => userObject);
+    return usuariosObject
 })
 
 server.get('/usuarios/:id', async (request, reply) => {
