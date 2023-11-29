@@ -10,6 +10,24 @@ server.register(cors, {
   // origin: 'http://localhost:4200', 
 });
 
+const authenticatedRouteOptions = {
+  preHandler: (request, reply, done) => {
+    const token = request.headers.authorization?.replace(/^Bearer /, "");
+    if (!token) reply.code(401).send({ message: "Unauthorized: token missing." });
+
+    const user = verifyToken(token);
+    if (!user) reply.code(404).send({ message: "Unauthorized: invalid token." });
+    request.user = user;
+    done();
+  }
+};
+
+function verifyToken(token) {
+  const decodedToken = jwt.verify(token, "segredo-do-jwt");
+  const user = this.repository.findByEmail(decodedToken.email);
+  return user;
+}
+
 server.post('/usuarios', async (request, reply) => {
   const { action } = request.body
   if(action == 'cadastro') {
@@ -46,13 +64,13 @@ server.get('/usuarios', async (request, reply) => {
     return userObjects
 })
 
-server.get('/usuarios/:id', async (request, reply) => {
+server.get('/usuarios/:id', authenticatedRouteOptions, async (request, reply) => {
   const userID = request.params.id;
   const userInfo = await database.buscarUsuarioID(userID)
   return userInfo
 })
 
-server.put('/usuarios/:id', async (request, reply) => {
+server.put('/usuarios/:id', authenticatedRouteOptions, async (request, reply) => {
   const { userID, musicasUsuario } = request.body
   await database.atualizarMusicasUsuario(userID, musicasUsuario)
   return reply.status(201).send()
