@@ -24,7 +24,7 @@ const authenticatedRouteOptions = {
 
 function verifyToken(token) {
   const decodedToken = jwt.verify(token, "segredo-do-jwt");
-  const user = this.repository.findByEmail(decodedToken.email);
+  const user = database.buscarUsuarioID(decodedToken.id);
   return user;
 }
 
