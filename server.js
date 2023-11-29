@@ -30,8 +30,8 @@ server.post('/usuarios', async (request, reply) => {
     const userPassword = userInfo[0].password
     if (userPassword == password) {
       const token = jwt.sign({ id: userInfo.id, email: userInfo.email }, "segredo-do-jwt", { expiresIn: "1d" });
-      userInfo.password = undefined
-      return reply.status(201).send({ token, user: userInfo });
+      const { userPassword, ...userObject } = userInfo;
+      return reply.status(201).send({ token, user: userObject });
     } else {
       return reply.status(401).send({ error: 'Credenciais inválidas.' });
     }
