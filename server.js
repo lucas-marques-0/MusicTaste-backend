@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 const server = fastify({ logger: true })
 const database = new DatabasePostgres()
 server.register(cors, {
-  origin: 'https://musictasteshare.vercel.app', 
+  origin: '*', 
   // origin: 'http://localhost:4200', 
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Authorization', 'Content-Type'], 
