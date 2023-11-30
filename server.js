@@ -1,5 +1,6 @@
 import { DatabasePostgres } from "./database-postgres.js"
 import fastify from "fastify";
+import fastifyCors from "fastify-cors";
 import cors from "fastify-cors";
 import jwt from 'jsonwebtoken';
 
@@ -8,6 +9,13 @@ const database = new DatabasePostgres()
 server.register(cors, {
   origin: 'https://musictasteshare.vercel.app', 
   // origin: 'http://localhost:4200', 
+});
+
+fastify.register(fastifyCors, {
+  origin: 'https://musictasteshare.vercel.app',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Authorization'],
+  credentials: true,
 });
 
 const authenticatedRouteOptions = {
