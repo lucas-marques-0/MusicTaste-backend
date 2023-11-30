@@ -11,8 +11,8 @@ server.register(cors, {
   // origin: 'http://localhost:4200', 
 });
 
-fastify.register(fastifyCors, {
-  origin: 'https://musictasteshare.vercel.app',
+server.register(fastifyCors, {
+  origin: 'https://musictasteshare.vercel.app', 
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Authorization'],
   credentials: true,
