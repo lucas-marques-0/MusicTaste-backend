@@ -9,10 +9,6 @@ const database = new DatabasePostgres()
 server.register(cors, {
   origin: 'https://musictasteshare.vercel.app', 
   // origin: 'http://localhost:4200', 
-});
-
-server.register(fastifyCors, {
-  origin: 'https://musictasteshare.vercel.app', 
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Authorization'],
   credentials: true,
