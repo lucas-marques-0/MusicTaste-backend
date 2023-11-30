@@ -8,7 +8,7 @@ const database = new DatabasePostgres()
 server.register(cors, {
   credentials: true,
   origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: [
     'X-CSRF-Token',
     'X-Requested-With',
