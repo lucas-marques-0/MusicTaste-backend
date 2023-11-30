@@ -9,8 +9,20 @@ server.register(cors, {
   credentials: true,
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization'], 
+  allowedHeaders: [
+    'X-CSRF-Token',
+    'X-Requested-With',
+    'Accept',
+    'Accept-Version',
+    'Content-Length',
+    'Content-MD5',
+    'Content-Type',
+    'Date',
+    'X-Api-Version',
+    'Authorization',
+  ], 
 });
+
 
 const authenticatedRouteOptions = {
   preHandler: (request, reply, done) => {
