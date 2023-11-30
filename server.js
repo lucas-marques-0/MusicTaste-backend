@@ -7,7 +7,7 @@ const server = fastify({ logger: true })
 const database = new DatabasePostgres()
 server.register(cors, {
   credentials: true,
-  origin: 'https://musictasteshare.vercel.app',
+  origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: [
     'X-CSRF-Token',
@@ -80,9 +80,6 @@ server.get('/usuarios', async (request, reply) => {
 })
 
 server.get('/usuarios/:id', authenticatedRouteOptions, async (request, reply) => {
-  reply.header('Access-Control-Allow-Origin', '*');
-  reply.header('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  reply.header('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization');
   const userID = request.params.id;
   const userInfo = await database.buscarUsuarioID(userID)
   return userInfo
