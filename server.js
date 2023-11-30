@@ -10,16 +10,23 @@ server.register(cors, {
   // origin: 'http://localhost:4200', 
 });
 
-const authenticatedRouteOptions = {
-  preHandler: (request, reply, done) => {
-    const token = request.headers.authorization?.replace(/^Bearer /, "");
-    if (!token) reply.code(401).send({ message: "Unauthorized: token missing." });
+const authenticatedRouteOptions = async (request, reply, done) => {
+  const token = request.headers.authorization?.replace(/^Bearer /, '');
 
-    const user = verifyToken(token);
-    if (!user) reply.code(404).send({ message: "Unauthorized: invalid token." });
-    request.user = user;
-    done();
+  if (!token) {
+    reply.code(401).send({ message: 'Unauthorized: Token missing.' });
+    return done(new Error('Unauthorized: Token missing.'));
   }
+
+  const user = verifyToken(token);
+
+  if (!user) {
+    reply.code(401).send({ message: 'Unauthorized: Invalid token.' });
+    return done(new Error('Unauthorized: Invalid token.'));
+  }
+
+  request.user = user;
+  done();
 };
 
 function verifyToken(token) {
@@ -64,7 +71,7 @@ server.get('/usuarios', async (request, reply) => {
     return userObjects
 })
 
-server.get('/usuarios/:id', authenticatedRouteOptions, async (request, reply) => {
+server.get('/usuarios/:id', { preHandler: authenticatedRouteOptions }, async (request, reply) => {
   const userID = request.params.id;
   const userInfo = await database.buscarUsuarioID(userID)
   return userInfo
