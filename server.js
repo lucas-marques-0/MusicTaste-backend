@@ -6,13 +6,7 @@ import jwt from 'jsonwebtoken';
 
 const server = fastify({ logger: true })
 const database = new DatabasePostgres()
-server.register(cors, {
-  origin: '*',
-  origin: true,
-  methods: 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
-  allowedHeaders: 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization',
-  credentials: true,
-});
+fastify.addHook('onSend', (request, reply, payload, next) => { console.log('KKTKO'); reply.header("Access-Control-Allow-Origin", "*"); reply.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Origin, Cache-Control") } ); 
 
 const authenticatedRouteOptions = {
   preHandler: (request, reply, done) => {
