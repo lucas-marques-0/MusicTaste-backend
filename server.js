@@ -7,15 +7,10 @@ import jwt from 'jsonwebtoken';
 const server = fastify({ logger: true })
 const database = new DatabasePostgres()
 server.register(cors, {
-  origin: 'https://musictasteshare.vercel.app', 
-  // origin: 'http://localhost:4200', 
-});
-
-server.addHook('onRequest', async (request, reply) => {
-  reply.header('Access-Control-Allow-Credentials', 'true');
-  reply.header('Access-Control-Allow-Origin', '*');
-  reply.header('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  reply.header('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization');
+  origin: '*',
+  methods: 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
+  allowedHeaders: 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization',
+  credentials: true,
 });
 
 const authenticatedRouteOptions = {
