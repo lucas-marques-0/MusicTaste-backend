@@ -20,6 +20,7 @@ server.register(cors, {
     'Date',
     'X-Api-Version',
     'Authorization',
+    'Access-Control-Allow-Origin'
   ], 
   exposedHeaders: ['Access-Control-Allow-Origin'],
 });
