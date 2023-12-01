@@ -13,6 +13,7 @@ server.register(cors, {
   credentials: true,
 });
 
+
 const authenticatedRouteOptions = {
   preHandler: (request, reply, done) => {
     const token = request.headers.authorization?.replace(/^Bearer /, "");
@@ -22,6 +23,7 @@ const authenticatedRouteOptions = {
     if (!user) reply.code(404).send({ message: "Unauthorized: invalid token." });
     
     request.user = user;
+    console.log('.fdfqwf')
     done();
   }
 };
