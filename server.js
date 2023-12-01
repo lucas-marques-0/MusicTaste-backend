@@ -12,6 +12,13 @@ server.register(cors, {
   credentials: true,
 });
 
+server.addHook('onRequest', async (request, reply) => {
+  reply.header('Access-Control-Allow-Credentials', 'true');
+  reply.header('Access-Control-Allow-Origin', '*');
+  reply.header('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  reply.header('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization');
+});
+
 const authenticatedRouteOptions = {
   preHandler: (request, reply, done) => {
     const token = request.headers.authorization?.replace(/^Bearer /, "");
