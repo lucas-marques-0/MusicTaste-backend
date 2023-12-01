@@ -8,11 +8,11 @@ const server = fastify({ logger: true })
 const database = new DatabasePostgres()
 server.register(cors, {
   origin: '*',
+  origin: true,
   methods: 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
   allowedHeaders: 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization',
   credentials: true,
 });
-
 
 const authenticatedRouteOptions = {
   preHandler: (request, reply, done) => {
@@ -23,7 +23,6 @@ const authenticatedRouteOptions = {
     if (!user) reply.code(404).send({ message: "Unauthorized: invalid token." });
     
     request.user = user;
-    console.log('.fdfqwf')
     done();
   }
 };
