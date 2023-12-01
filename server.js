@@ -7,7 +7,7 @@ const server = fastify({ logger: true })
 const database = new DatabasePostgres()
 server.register(cors, {
   credentials: true,
-  origin: '*',
+  origin: 'https://musictasteshare.vercel.app',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: [
     'X-CSRF-Token',
