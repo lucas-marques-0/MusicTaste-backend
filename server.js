@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 
 const server = fastify({ logger: true })
 const database = new DatabasePostgres()
-server.register(cors, {
+fastify.register(cors, {
   credentials: true,
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
@@ -20,9 +20,7 @@ server.register(cors, {
     'Date',
     'X-Api-Version',
     'Authorization',
-    'Access-Control-Allow-Origin'
   ], 
-  exposedHeaders: ['Access-Control-Allow-Origin'],
 });
 
 
