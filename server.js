@@ -1,11 +1,12 @@
 import { DatabasePostgres } from "./database-postgres.js"
 import fastify from "fastify";
+import fastifyCors from "fastify-cors";
 import cors from "fastify-cors";
 import jwt from 'jsonwebtoken';
 
 const server = fastify({ logger: true })
 const database = new DatabasePostgres()
-server.register(cors, {
+server.register(require('fastify-cors'), {
   "origin": '',
   "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
   "preflightContinue": true,
@@ -24,7 +25,7 @@ const authenticatedRouteOptions = {
 
     const user = verifyToken(token);
     if (!user) reply.code(404).send({ message: "Unauthorized: invalid token." });
-
+    
     request.user = user;
     done();
   }
@@ -38,18 +39,18 @@ function verifyToken(token) {
 
 server.post('/usuarios', async (request, reply) => {
   const { action } = request.body
-  if (action == 'cadastro') {
+  if(action == 'cadastro') {
     const { username, email, password, avatar, musicas } = request.body
     await database.criarUsuario({
-      username: username,
-      email: email,
-      password: password,
-      avatar: avatar,
-      musicas: musicas
+        username: username,
+        email: email,
+        password: password,
+        avatar: avatar,                     
+        musicas: musicas
     })
     return reply.status(201).send()
-  }
-  if (action == 'login') {
+  } 
+  if(action == 'login') {
     const { userID, password } = request.body
     const userInfo = await database.buscarUsuarioID(userID)
     const userPassword = userInfo[0].password
@@ -64,12 +65,12 @@ server.post('/usuarios', async (request, reply) => {
 })
 
 server.get('/usuarios', async (request, reply) => {
-  const users = await database.buscarUsuarios()
-  const userObjects = users.map(user => {
-    const { password, ...userObject } = user;
-    return userObject;
-  });
-  return userObjects
+    const users = await database.buscarUsuarios()
+    const userObjects = users.map(user => {
+      const { password, ...userObject } = user;
+      return userObject;
+    });
+    return userObjects
 })
 
 server.get('/usuarios/:id', authenticatedRouteOptions, async (request, reply) => {
