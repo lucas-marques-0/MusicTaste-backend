@@ -6,21 +6,14 @@ import jwt from 'jsonwebtoken';
 
 const server = fastify({ logger: true })
 const database = new DatabasePostgres()
-server.register(require('fastify-cors'), {
-  "origin": '',
-  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
-  "preflightContinue": true,
-  "optionsSuccessStatus": 201
-})
-server.addHook('onSend', (request, reply, payload, next) => {
-  reply.header("Access-Control-Allow-Origin", "");
-  reply.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Origin, Cache-Control");
-  next()
-})
+server.register(cors, {
+  origin: 'https://musictasteshare.vercel.app', 
+  // origin: 'http://localhost:4200', 
+});
 
 const authenticatedRouteOptions = {
   preHandler: (request, reply, done) => {
-    const token = request.headers.authorization?.replace(/^Bearer /, "");
+    const token = request.params.headers.authorization?.replace(/^Bearer /, "");
     if (!token) reply.code(401).send({ message: "Unauthorized: token missing." });
 
     const user = verifyToken(token);
