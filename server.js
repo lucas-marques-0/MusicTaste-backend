@@ -70,9 +70,6 @@ app.get('/usuarios', async (req, res) => {
 });
 
 app.get('/usuarios/:id', authenticatedRouteOptions, async (req, res) => {
-  const { token } = req.headers.authorization?.replace(/^Bearer /, '');
-  const teste = [ req.headers, token ]
-
   const userID = req.params.id;
   const userInfo = await database.buscarUsuarioID(userID);
   return res.json(userInfo).send({ teste });
