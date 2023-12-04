@@ -8,7 +8,11 @@ const port = process.env.PORT || 3333;
 const database = new DatabasePostgres();
 
 //app.use(cors({ origin: '*' }));
-app.use(cors())
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Origin, Cache-Control");
+  next()
+});
 
 const authenticatedRouteOptions = (req, res, next) => {
   const token = req.headers.authorization?.replace(/^Bearer /, '');
