@@ -12,6 +12,7 @@ app.use(cors({
 }));
 
 const authenticatedRouteOptions = (req, res, next) => {
+  console.log('chega na autenticação')
   const token = req.headers.authorization?.replace(/^Bearer /, '');
   if (!token) return res.status(401).json({ message: 'Unauthorized: token missing.' });
 
