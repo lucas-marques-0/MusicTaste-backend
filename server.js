@@ -76,6 +76,8 @@ app.get('/usuarios/:id', async (req, res) => {
 });
 
 app.put('/usuarios/:id', authenticatedRouteOptions, async (req, res) => {
+  const { token } = req.headers.authorization?.replace(/^Bearer /, '');
+  console.log(token)
   const { userID, musicasUsuario } = req.body;
   await database.atualizarMusicasUsuario(userID, musicasUsuario);
   return res.status(201).send();
