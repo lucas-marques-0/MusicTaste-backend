@@ -1,4 +1,4 @@
-import express, { response } from 'express';
+import express from 'express';
 import cors from 'cors';
 import jwt from 'jsonwebtoken';
 import { DatabasePostgres } from './database-postgres.js';
@@ -7,7 +7,7 @@ const app = express();
 const port = process.env.PORT || 3333;
 const database = new DatabasePostgres();
 
-app.use(cors({ origin: '*' }));
+app.use(cors({origin: 'https://musictasteshare.vercel.app'}));
 
 const authenticatedRouteOptions = (req, res, next) => {
   const token = req.headers.authorization?.replace(/^Bearer /, '');
