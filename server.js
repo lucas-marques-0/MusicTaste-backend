@@ -7,6 +7,13 @@ const app = express();
 const port = process.env.PORT || 3333;
 const database = new DatabasePostgres();
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://musictasteshare.vercel.app');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  next();
+});
+
 app.use(cors({
   origin: '*'
 }));
