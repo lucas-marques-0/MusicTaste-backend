@@ -12,8 +12,8 @@ app.use(cors({
 }));
 
 const authenticatedRouteOptions = (req, res, next) => {
-  console.log('chega na autenticação')
-  const token = req.headers.authorization?.replace(/^Bearer /, '');
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1]
   if (!token) { return res.status(401).json({ message: 'Unauthorized: token missing.' }) };
 
   const user = verifyToken(token);
@@ -69,18 +69,19 @@ app.get('/usuarios', async (req, res) => {
   return res.json(userObjects);
 });
 
-app.get('/usuarios/:id', async (req, res) => {
+app.get('/usuarios/:id', authenticatedRouteOptions, async (req, res) => {
+  const { token } = req.headers.authorization?.replace(/^Bearer /, '');
+  const teste = [ req.headers, token ]
+
   const userID = req.params.id;
   const userInfo = await database.buscarUsuarioID(userID);
-  return res.json(userInfo);
+  return res.json(userInfo).send({ teste });
 });
 
 app.put('/usuarios/:id', authenticatedRouteOptions, async (req, res) => {
-  const { token } = req.headers.authorization?.replace(/^Bearer /, '');
-  const teste = [ req.headers, token ]
   const { userID, musicasUsuario } = req.body;
   await database.atualizarMusicasUsuario(userID, musicasUsuario);
-  return res.status(201).send({ teste });
+  return res.status(201);
 });
 
 app.listen(port, () => {
