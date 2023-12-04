@@ -1,84 +1,88 @@
-import { DatabasePostgres } from "./database-postgres.js"
-import fastify from "fastify";
-import fastifyCors from "fastify-cors";
-import cors from "fastify-cors";
+import express from 'express';
+import cors from 'cors';
 import jwt from 'jsonwebtoken';
+import { DatabasePostgres } from './database-postgres.js';
 
-const server = fastify({ logger: true })
-const database = new DatabasePostgres()
-server.register(cors, {
-  origin: 'https://musictasteshare.vercel.app', 
-  // origin: 'http://localhost:4200', 
-});
+const app = express();
+const port = process.env.PORT || 3333;
+const database = new DatabasePostgres();
 
-const authenticatedRouteOptions = {
-  preHandler: (request, reply, done) => {
-    const token = request.params.headers.authorization?.replace(/^Bearer /, "");
-    if (!token) reply.code(401).send({ message: "Unauthorized: token missing." });
+app.use(
+  cors({
+    origin: 'https://musictasteshare.vercel.app',
+    // origin: 'http://localhost:4200',
+  })
+);
 
-    const user = verifyToken(token);
-    if (!user) reply.code(404).send({ message: "Unauthorized: invalid token." });
-    
-    request.user = user;
-    done();
-  }
+const authenticatedRouteOptions = (req, res, next) => {
+  const token = req.headers.authorization?.replace(/^Bearer /, '');
+  if (!token) return res.status(401).json({ message: 'Unauthorized: token missing.' });
+
+  const user = verifyToken(token);
+  if (!user) return res.status(404).json({ message: 'Unauthorized: invalid token.' });
+
+  req.user = user;
+  next();
 };
 
 function verifyToken(token) {
-  const decodedToken = jwt.verify(token, "segredo-do-jwt");
+  const decodedToken = jwt.verify(token, 'segredo-do-jwt');
   const user = database.buscarUsuarioID(decodedToken.id);
   return user;
 }
 
-server.post('/usuarios', async (request, reply) => {
-  const { action } = request.body
-  if(action == 'cadastro') {
-    const { username, email, password, avatar, musicas } = request.body
+app.use(express.json());
+
+app.post('/usuarios', async (req, res) => {
+  const { action } = req.body;
+  if (action === 'cadastro') {
+    const { username, email, password, avatar, musicas } = req.body;
     await database.criarUsuario({
-        username: username,
-        email: email,
-        password: password,
-        avatar: avatar,                     
-        musicas: musicas
-    })
-    return reply.status(201).send()
-  } 
-  if(action == 'login') {
-    const { userID, password } = request.body
-    const userInfo = await database.buscarUsuarioID(userID)
-    const userPassword = userInfo[0].password
-    if (userPassword == password) {
-      const token = jwt.sign({ id: userInfo.id, email: userInfo.email }, "segredo-do-jwt", { expiresIn: "1d" });
+      username: username,
+      email: email,
+      password: password,
+      avatar: avatar,
+      musicas: musicas,
+    });
+    return res.status(201).send();
+  }
+  if (action === 'login') {
+    const { userID, password } = req.body;
+    const userInfo = await database.buscarUsuarioID(userID);
+    const userPassword = userInfo[0].password;
+    if (userPassword === password) {
+      const token = jwt.sign({ id: userInfo.id, email: userInfo.email }, 'segredo-do-jwt', {
+        expiresIn: '1d',
+      });
       const userObject = { ...userInfo[0], password: undefined };
-      return reply.status(201).send({ token, user: userObject });
+      return res.status(201).json({ token, user: userObject });
     } else {
-      return reply.status(401).send({ error: 'Credenciais inválidas.' });
+      return res.status(401).json({ error: 'Credenciais inválidas.' });
     }
   }
-})
+});
 
-server.get('/usuarios', async (request, reply) => {
-    const users = await database.buscarUsuarios()
-    const userObjects = users.map(user => {
-      const { password, ...userObject } = user;
-      return userObject;
-    });
-    return userObjects
-})
+app.get('/usuarios', async (req, res) => {
+  const users = await database.buscarUsuarios();
+  const userObjects = users.map((user) => {
+    const { password, ...userObject } = user;
+    return userObject;
+  });
+  return res.json(userObjects);
+});
 
-server.get('/usuarios/:id', authenticatedRouteOptions, async (request, reply) => {
-  const userID = request.params.id;
-  const userInfo = await database.buscarUsuarioID(userID)
-  return userInfo
-})
+app.get('/usuarios/:id', authenticatedRouteOptions, async (req, res) => {
+  const userID = req.params.id;
+  const userInfo = await database.buscarUsuarioID(userID);
+  return res.json(userInfo);
+});
 
-server.put('/usuarios/:id', authenticatedRouteOptions, async (request, reply) => {
-  const { userID, musicasUsuario } = request.body
-  await database.atualizarMusicasUsuario(userID, musicasUsuario)
-  return reply.status(201).send()
-})
+app.put('/usuarios/:id', authenticatedRouteOptions, async (req, res) => {
+  const { userID, musicasUsuario } = req.body;
+  await database.atualizarMusicasUsuario(userID, musicasUsuario);
+  return res.status(201).send();
+});
 
-server.listen({
-  host: '0.0.0.0',
-  port: process.env.PORT ?? 3333
-})
+app.listen(port, () => {
+  console.log(`Server is running at http://localhost:${port}`);
+});
