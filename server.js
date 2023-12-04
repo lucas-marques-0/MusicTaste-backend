@@ -8,16 +8,8 @@ const port = process.env.PORT || 3333;
 const database = new DatabasePostgres();
 
 app.use(cors({
-  origin: '*',
+  origin: 'https://musictasteshare.vercel.app',
 }));
-
-app.use((req, res, next) => {
-  console.log('Headers received:', req.headers);
-  res.header('Access-Control-Allow-Origin', 'https://musictasteshare.vercel.app');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  next();
-});
 
 const authenticatedRouteOptions = (req, res, next) => {
   const token = req.headers.authorization?.replace(/^Bearer /, '');
