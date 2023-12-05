@@ -35,11 +35,10 @@ function verifyToken(token) {
   return user;
 }
 
-app.get('/usuarios/:id', async (req, res) => {
+app.get('/usuarios/:id', authenticateToken, async (req, res) => {
   const userID = req.params.id;
-  const token = req.headers['Authorization'];
   const userInfo = await database.buscarUsuarioID(userID);
-  return res.json(userInfo, token);
+  return res.json(userInfo);
 });
 
 app.use(express.json());
