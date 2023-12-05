@@ -1,5 +1,4 @@
 import express from 'express';
-import cors from 'cors';
 import jwt from 'jsonwebtoken';
 import { DatabasePostgres } from './database-postgres.js';
 
@@ -7,21 +6,18 @@ const app = express();
 const port = process.env.PORT || 3333;
 const database = new DatabasePostgres();
 
-app.use(cors({
-  origin: '*',
-}));
-
-const allowCors = (handler) => async (req, res) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
+app.use(function(req, res, next) {
+  const allowedOrigins = ['http://localhost:3000', 'http://musictaste-backend.onrender.com', 'https://musictaste-backend.onrender.com'];
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+       res.setHeader('Access-Control-Allow-Origin', origin);
   }
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.header("Access-Control-Allow-credentials", true);
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, UPDATE");
+  next();
+});
 
-  return handler(req, res);
-};
 
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization']
@@ -72,20 +68,20 @@ app.post('/usuarios', async (req, res) => {
   }
 });
 
-app.get('/usuarios', allowCors(async (req, res) => {
+app.get('/usuarios', async (req, res) => {
   const users = await database.buscarUsuarios();
   const userObjects = users.map((user) => {
     const { password, ...userObject } = user;
     return userObject;
   });
   return res.json(userObjects);
-}));
+});
 
-app.get('/usuarios/:id', authenticateToken, allowCors(async (req, res) => {
+app.get('/usuarios/:id', authenticateToken, async (req, res) => {
   const userID = req.params.id;
   const userInfo = await database.buscarUsuarioID(userID);
   return res.json(userInfo);
-}));
+});
 
 app.put('/usuarios/:id', authenticateToken, async (req, res) => {
   const { userID, musicasUsuario } = req.body;
