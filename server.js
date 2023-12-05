@@ -17,7 +17,7 @@ const authenticateToken = (req, res, next) => {
   const token = req.headers['Authorization'];
   
   if (!token) {
-    return res.status(401).json({ message: 'Sem token' })
+    return res.status(401).json({ message: 'Não achou o token.' })
   };
 
   const user = verifyToken(token);
