@@ -7,9 +7,9 @@ const app = express();
 const port = process.env.PORT || 3333;
 const database = new DatabasePostgres();
 
-app.use(cors({
-  origin: '*',
-}));
+const corsAllow = {
+  origin: ['*'],
+}
 
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization']
@@ -69,7 +69,7 @@ app.get('/usuarios', async (req, res) => {
   return res.json(userObjects);
 });
 
-app.get('/usuarios/:id', authenticateToken, async (req, res) => {
+app.get('/usuarios/:id', cors(corsAllow), authenticateToken, async (req, res) => {
   const userID = req.params.id;
   const userInfo = await database.buscarUsuarioID(userID);
   return res.json(userInfo);
