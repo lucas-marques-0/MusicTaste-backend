@@ -7,8 +7,6 @@ const app = express();
 const port = process.env.PORT || 3333;
 const database = new DatabasePostgres();
 
-app.use(cors());
-
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization']
   const token = authHeader && authHeader.split(' ')[1]
