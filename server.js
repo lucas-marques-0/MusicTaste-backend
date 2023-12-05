@@ -1,10 +1,16 @@
 import express from 'express';
+import cors from 'cors'
 import jwt from 'jsonwebtoken';
 import { DatabasePostgres } from './database-postgres.js';
 
 const app = express();
 const port = process.env.PORT || 3333;
 const database = new DatabasePostgres();
+
+app.use(cors({
+  origin: '*',
+  allowedHeaders: '*'
+}))
 
 app.use(function(req, res, next) {
   const allowedOrigins = ['http://localhost:3000', 'http://musictaste-backend.onrender.com', 'https://musictaste-backend.onrender.com'];
