@@ -8,8 +8,23 @@ const port = process.env.PORT || 3333;
 const database = new DatabasePostgres();
 
 app.use(cors({
-  origin: '*',
+  origin: 'https://musictasteshare.vercel.app',
 }));
+
+const allowCors = fn => async (req, res) => {
+  res.setHeader('Access-Control-Allow-Credentials', true)
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  )
+  if (req.method === 'OPTIONS') {
+    res.status(200).end()
+    return
+  }
+  return await fn(req, res)
+}
 
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization']
@@ -60,20 +75,20 @@ app.post('/usuarios', async (req, res) => {
   }
 });
 
-app.get('/usuarios', async (req, res) => {
+app.get('/usuarios', allowCors(async (req, res) => {
   const users = await database.buscarUsuarios();
   const userObjects = users.map((user) => {
     const { password, ...userObject } = user;
     return userObject;
   });
   return res.json(userObjects);
-});
+}));
 
-app.get('/usuarios/:id', authenticateToken, async (req, res) => {
+app.get('/usuarios/:id', allowCors(authenticateToken, async (req, res) => {
   const userID = req.params.id;
   const userInfo = await database.buscarUsuarioID(userID);
   return res.json(userInfo);
-});
+}));
 
 app.put('/usuarios/:id', authenticateToken, async (req, res) => {
   const { userID, musicasUsuario } = req.body;
