@@ -17,7 +17,7 @@ const authenticateToken = (req, res, next) => {
   const token = req.headers['Authorization'];
   
   if (!token) {
-    return res.status(401).json({ message: 'Unauthorized: token missing.', token: token })
+    return res.status(401).json({ message: 'Sem token', headers: req })
   };
 
   const user = verifyToken(token);
