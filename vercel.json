@@ -1,0 +1,14 @@
+{
+    "headers": [
+        {
+            "source": "/usuarios/:id",
+            "headers": [
+                {
+                    "key": "Access-Control-Allow-Origin",
+                    "value": "*"
+                }
+            ]
+        }
+    ]
+}
+  
