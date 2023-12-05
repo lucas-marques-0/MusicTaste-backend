@@ -15,9 +15,9 @@ app.use(cors({
 
 const authenticateToken = (req, res, next) => {
   const token = req.headers['Authorization'];
-
+  
   if (!token) {
-    return res.status(401).json({ message: 'Unauthorized: token missing.' })
+    return res.status(401).json({ message: 'Unauthorized: token missing.', token: token })
   };
 
   const user = verifyToken(token);
@@ -35,10 +35,11 @@ function verifyToken(token) {
   return user;
 }
 
-app.get('/usuarios/:id', authenticateToken, async (req, res) => {
+app.get('/usuarios/:id', async (req, res) => {
   const userID = req.params.id;
+  const token = req.headers['Authorization'];
   const userInfo = await database.buscarUsuarioID(userID);
-  return res.json(userInfo);
+  return res.json(userInfo).send({ token });
 });
 
 app.use(express.json());
@@ -81,11 +82,10 @@ app.get('/usuarios', async (req, res) => {
   return res.json(userObjects);
 });
 
-app.put('/usuarios/:id', async (req, res) => {
+app.put('/usuarios/:id', authenticateToken, async (req, res) => {
   const { userID, musicasUsuario } = req.body;
-  const token = req.headers['Authorization'];
   await database.atualizarMusicasUsuario(userID, musicasUsuario);
-  return res.status(201).send({ token });
+  return res.status(201).send();
 });
 
 app.listen(port, () => {
