@@ -39,7 +39,7 @@ app.get('/usuarios/:id', async (req, res) => {
   const userID = req.params.id;
   const token = req.headers['Authorization'];
   const userInfo = await database.buscarUsuarioID(userID);
-  return res.json(userInfo).send({ token });
+  return res.json(userInfo, token);
 });
 
 app.use(express.json());
