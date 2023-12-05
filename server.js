@@ -23,7 +23,7 @@ const allowCors = fn => async (req, res) => {
 }
 
 app.use(cors({
-  origin: '*',
+  origin: 'https://musictasteshare.vercel.app',
 }));
 
 const authenticateToken = (req, res, next) => {
@@ -84,7 +84,7 @@ app.get('/usuarios', async (req, res) => {
   return res.json(userObjects);
 });
 
-app.get('/usuarios/:id', authenticateToken, allowCors(async (req, res) => {
+app.get('usuarios/:id', authenticateToken, allowCors(async (req, res) => {
   const userID = req.params.id;
   const userInfo = await database.buscarUsuarioID(userID);
   return res.json(userInfo);
