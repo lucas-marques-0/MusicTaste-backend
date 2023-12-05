@@ -8,7 +8,7 @@ const port = process.env.PORT || 3333;
 const database = new DatabasePostgres();
 
 app.use(cors({
-  origin: 'https://music-taste-frontend-lucas-marques-0.vercel.app/https://musictasteshare.vercel.app',
+  origin: 'https://musictasteshare.vercel.app',
 }));
 
 const authenticateToken = (req, res, next) => {
