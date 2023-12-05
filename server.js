@@ -7,8 +7,6 @@ const app = express();
 const port = process.env.PORT || 3333;
 const database = new DatabasePostgres();
 
-
-
 const allowCors = fn => async (req, res) => {
   res.setHeader('Access-Control-Allow-Credentials', true)
   res.setHeader('Access-Control-Allow-Origin', '*')
@@ -25,7 +23,7 @@ const allowCors = fn => async (req, res) => {
 }
 
 app.use(cors({
-  origin: 'https://musictasteshare.vercel.app',
+  origin: '*',
 }));
 
 const authenticateToken = (req, res, next) => {
