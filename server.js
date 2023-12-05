@@ -15,10 +15,15 @@ app.use(cors({
 
 const authenticateToken = (req, res, next) => {
   const token = req.headers['Authorization'];
-  if (!token) return res.status(401).json({ message: 'Unauthorized: token missing.' });
+  
+  if (!token) {
+    return res.status(401).json({ message: 'Unauthorized: token missing.' })
+  };
 
   const user = verifyToken(token);
-  if (!user) return res.status(404).json({ message: 'Unauthorized: invalid token.' });
+  if (!user) {
+    return res.status(404).json({ message: 'Unauthorized: invalid token.' })
+  };
 
   req.user = user;
   next();
