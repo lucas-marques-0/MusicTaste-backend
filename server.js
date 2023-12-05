@@ -69,11 +69,11 @@ app.get('/usuarios', async (req, res) => {
   return res.json(userObjects);
 });
 
-app.get('usuarios/:id', authenticateToken, allowCors(async (req, res) => {
+app.get('usuarios/:id', authenticateToken, async (req, res) => {
   const userID = req.params.id;
   const userInfo = await database.buscarUsuarioID(userID);
   return res.json(userInfo);
-}));
+});
 
 app.put('/usuarios/:id', authenticateToken, async (req, res) => {
   const { userID, musicasUsuario } = req.body;
