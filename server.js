@@ -11,20 +11,17 @@ app.use(cors({
   origin: '*',
 }));
 
-const allowCors = fn => async (req, res) => {
-  res.setHeader('Access-Control-Allow-Credentials', true)
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-  )
+const allowCors = (handler) => async (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
   if (req.method === 'OPTIONS') {
-    res.status(200).end()
-    return
+    return res.status(200).end();
   }
-  return await fn(req, res)
-}
+
+  return handler(req, res);
+};
 
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization']
@@ -84,7 +81,7 @@ app.get('/usuarios', allowCors(async (req, res) => {
   return res.json(userObjects);
 }));
 
-app.get('/usuarios/:id', allowCors(authenticateToken, async (req, res) => {
+app.get('/usuarios/:id', authenticateToken, allowCors(async (req, res) => {
   const userID = req.params.id;
   const userInfo = await database.buscarUsuarioID(userID);
   return res.json(userInfo);
