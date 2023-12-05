@@ -11,13 +11,12 @@ app.use(cors({
   origin: 'https://musictasteshare.vercel.app',
 }));
 
-const authenticatedRouteOptions = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1]
-  if (!token) { return res.status(401).json({ message: 'Unauthorized: token missing.' }) };
+const autenticarRota = (req, res, next) => {
+  const token = req.headers.Authorization?.replace(/^Bearer /, '');
+  if (!token) return res.status(401).json({ message: 'Unauthorized: token missing.' });
 
   const user = verifyToken(token);
-  if (!user) { return res.status(404).json({ message: 'Unauthorized: invalid token.' }) };
+  if (!user) return res.status(404).json({ message: 'Unauthorized: invalid token.' });
 
   req.user = user;
   next();
@@ -69,16 +68,16 @@ app.get('/usuarios', async (req, res) => {
   return res.json(userObjects);
 });
 
-app.get('/usuarios/:id', authenticatedRouteOptions, async (req, res) => {
+app.get('/usuarios/:id', autenticarRota, async (req, res) => {
   const userID = req.params.id;
   const userInfo = await database.buscarUsuarioID(userID);
-  return res.json(userInfo).send({ teste });
+  return res.json(userInfo);
 });
 
-app.put('/usuarios/:id', authenticatedRouteOptions, async (req, res) => {
+app.put('/usuarios/:id', autenticarRota, async (req, res) => {
   const { userID, musicasUsuario } = req.body;
   await database.atualizarMusicasUsuario(userID, musicasUsuario);
-  return res.status(201);
+  return res.status(201).send();
 });
 
 app.listen(port, () => {
