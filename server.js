@@ -10,7 +10,7 @@ const database = new DatabasePostgres();
 app.use(cors({
   origin: '*',
   methods: 'GET,HEAD,PUT,DELETE',
-  headers: 'Content-Type,Authorization',
+  headers: '*'
 }))
 
 const authenticateToken = (req, res, next) => {
