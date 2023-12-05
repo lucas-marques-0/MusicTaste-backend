@@ -1,5 +1,5 @@
 import express from 'express';
-const cors = require("cors");
+import cors from 'cors';
 import jwt from 'jsonwebtoken';
 import { DatabasePostgres } from './database-postgres.js';
 
@@ -7,7 +7,9 @@ const app = express();
 const port = process.env.PORT || 3333;
 const database = new DatabasePostgres();
 
-app.use(cors());
+app.use(cors({
+  origin: 'https://musictasteshare.vercel.app',
+}));
 
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization']
