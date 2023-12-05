@@ -11,8 +11,9 @@ app.use(cors({
   origin: 'https://musictasteshare.vercel.app',
 }));
 
-const autenticarRota = (req, res, next) => {
-  const token = req.headers.Authorization?.replace(/^Bearer /, '');
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization']
+  const token = authHeader && authHeader.split(' ')[1]
   if (!token) return res.status(401).json({ message: 'Unauthorized: token missing.' });
 
   const user = verifyToken(token);
@@ -68,13 +69,13 @@ app.get('/usuarios', async (req, res) => {
   return res.json(userObjects);
 });
 
-app.get('/usuarios/:id', autenticarRota, async (req, res) => {
+app.get('/usuarios/:id', authenticateToken, async (req, res) => {
   const userID = req.params.id;
   const userInfo = await database.buscarUsuarioID(userID);
   return res.json(userInfo);
 });
 
-app.put('/usuarios/:id', autenticarRota, async (req, res) => {
+app.put('/usuarios/:id', authenticateToken, async (req, res) => {
   const { userID, musicasUsuario } = req.body;
   await database.atualizarMusicasUsuario(userID, musicasUsuario);
   return res.status(201).send();
