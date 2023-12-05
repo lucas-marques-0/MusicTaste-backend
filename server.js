@@ -8,7 +8,7 @@ const port = process.env.PORT || 3333;
 const database = new DatabasePostgres();
 
 app.use(cors({
-  origin: 'https://musictasteshare.vercel.app',
+  origin: '*',
 }))
 
 const authenticateToken = (req, res, next) => {
@@ -28,6 +28,12 @@ function verifyToken(token) {
   const user = database.buscarUsuarioID(decodedToken.id);
   return user;
 }
+
+app.get('/usuarios/:id', authenticateToken, async (req, res) => {
+  const userID = req.params.id;
+  const userInfo = await database.buscarUsuarioID(userID);
+  return res.json(userInfo);
+});
 
 app.use(express.json());
 
@@ -67,12 +73,6 @@ app.get('/usuarios', async (req, res) => {
     return userObject;
   });
   return res.json(userObjects);
-});
-
-app.get('/usuarios/:id', authenticateToken, async (req, res) => {
-  const userID = req.params.id;
-  const userInfo = await database.buscarUsuarioID(userID);
-  return res.json(userInfo);
 });
 
 app.put('/usuarios/:id', authenticateToken, async (req, res) => {
