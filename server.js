@@ -14,8 +14,7 @@ app.use(cors({
 }))
 
 const authenticateToken = (req, res, next) => {
-  const token = req.headers['Authorization']
-  //const token = authHeader && authHeader.split(' ')[1]
+  const token = req.headers['authorization'];
   if (!token) return res.status(401).json({ message: 'Unauthorized: token missing.' });
 
   const user = verifyToken(token);
