@@ -9,7 +9,7 @@ const database = new DatabasePostgres();
 
 app.use(cors({
   origin: '*',
-  methods: 'GET,HEAD,PUT,DELETE',
+  methods: 'GET, HEAD, PUT, DELETE, POST, OPTIONS',
   allowedHeaders: '*'
 }))
 
