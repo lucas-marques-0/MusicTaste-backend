@@ -36,8 +36,8 @@ function verifyToken(token) {
   return user;
 } 
 
-app.use('/verificar-token', async (req, res) => {
-  const { token } = req.headers;
+app.use('/verificar-token/:token', async (req, res) => {
+  const token = req.params.token;
   if (!token) return res.status(401).json({ error: 'Token não fornecido.' });
   return jwt.verify(token, 'segredo-do-jwt');
 });
