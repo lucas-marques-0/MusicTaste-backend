@@ -14,8 +14,8 @@ app.use(cors({
 }))
 
 const authenticateToken = (req, res, next) => {
-  const header = req.headers['Authorization'];
-  const token = header.replace(/^Bearer\s/, '');
+  const authHeader = req.headers['Authorization']
+  const token = authHeader && authHeader.split(' ')[1]
   
   if (!token) {
     return res.status(401).json({ message: 'Não achou o token.', token: token })
