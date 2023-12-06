@@ -14,7 +14,7 @@ app.use(cors({
 }))
 
 const authenticateToken = (req, res, next) => {
-  const token = req.headers[0]['authorization'][0];
+  const token = req.headers['authorization'];
   
   if (token == null || undefined) {
     return res.status(401).json({ message: 'Achou o token.' })
