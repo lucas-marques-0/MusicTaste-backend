@@ -13,7 +13,7 @@ app.use(cors({
   //allowedHeaders: '*'
 }))
 
-const authenticateToken = (req, res, next) => {
+/* const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['Authorization']
   const token = authHeader && authHeader.split(' ')[1]
   
@@ -28,13 +28,19 @@ const authenticateToken = (req, res, next) => {
 
   req.user = user;
   next();
-}
+} */
 
 function verifyToken(token) {
   const decodedToken = jwt.verify(token, 'segredo-do-jwt');
   const user = database.buscarUsuarioID(decodedToken.id);
   return user;
-}
+} 
+
+app.use('/verificar-token', async (req, res) => {
+  const { token } = req.headers;
+  if (!token) return res.status(401).json({ error: 'Token não fornecido.' });
+  return jwt.verify(token, 'segredo-do-jwt');
+});
 
 app.use(express.json());
 
