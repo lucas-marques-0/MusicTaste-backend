@@ -57,7 +57,7 @@ app.post('/usuarios', async (req, res) => {
     const userPassword = userInfo[0].password;
     if (userPassword === password) {
       const token = jwt.sign({ id: userInfo.id, email: userInfo.email }, 'segredo-do-jwt', {
-        expiresIn: 60,
+        expiresIn: '1d',
       });
       const userObject = { ...userInfo[0], password: undefined };
       return res.status(201).json({ token, user: userObject });
