@@ -14,10 +14,11 @@ app.use(cors({
 }))
 
 const authenticateToken = (req, res, next) => {
-  const token = req.headers['Authorization'];
+  const header = req.headers['Authorization'];
+  const token = header.replace(/^Bearer\s/, '');
   
   if (!token) {
-    return res.status(401).json({ message: 'Achou o token.', token: token })
+    return res.status(401).json({ message: 'Não achou o token.', token: token })
   };
 
   const user = verifyToken(token);
