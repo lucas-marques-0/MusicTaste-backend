@@ -9,40 +9,15 @@ const database = new DatabasePostgres();
 
 app.use(cors({
   origin: '*',
-  //methods: 'GET, HEAD, PUT, DELETE, POST, OPTIONS',
-  //allowedHeaders: '*'
-}))
+}));
 
-/* const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers['Authorization']
-  const token = authHeader && authHeader.split(' ')[1]
-  
-  if (!token) {
-    return res.status(401).json({ message: 'Não achou o token.', token: token })
-  };
-
-  const user = verifyToken(token);
-  if (!user) {
-    return res.status(404).json({ message: 'Unauthorized: invalid token.' })
-  };
-
-  req.user = user;
-  next();
-} */
+app.use(express.json());
 
 function verifyToken(token) {
   const decodedToken = jwt.verify(token, 'segredo-do-jwt');
   const user = database.buscarUsuarioID(decodedToken.id);
   return user;
-} 
-
-app.get('/usuarios/:token', async (req, res) => {
-  const token = req.params.token;
-  if (!token) return res.status(401).json({ error: 'Token não fornecido.' });
-  return jwt.verify(token, 'segredo-do-jwt');
-});
-
-app.use(express.json());
+}
 
 app.post('/usuarios', async (req, res) => {
   const { action } = req.body;
