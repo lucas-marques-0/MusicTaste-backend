@@ -13,11 +13,24 @@ app.use(cors({
 
 app.use(express.json());
 
+const authenticateToken = (req, res, next) => {
+  const token = req.body.token
+  
+  if (!token) return res.status(401).json({ message: 'Não achou o token.', token: token })
+
+  const user = verifyToken(token);
+  if (!user) return res.status(404).json({ message: 'Unauthorized: invalid token.' })
+
+  req.user = user;
+  next();
+}
+
 function verifyToken(token) {
   const decodedToken = jwt.verify(token, 'segredo-do-jwt');
   const user = database.buscarUsuarioID(decodedToken.id);
   return user;
 }
+
 
 app.post('/usuarios', async (req, res) => {
   const { action } = req.body;
@@ -48,7 +61,7 @@ app.post('/usuarios', async (req, res) => {
   }
 });
 
-// -------
+// ----------
 
 app.get('/usuarios', async (req, res) => {
   const users = await database.buscarUsuarios();
@@ -59,16 +72,22 @@ app.get('/usuarios', async (req, res) => {
   return res.json(userObjects);
 });
 
-app.get('/usuarios/:dado', async (req, res) => {
+app.get('/usuarios/:id', authenticateToken, async (req, res) => {
+  const userID = req.params.id;
+  const userInfo = await database.buscarUsuarioID(userID);
+  return res.json(userInfo);
+});
+
+/* app.get('/usuarios/:dado', async (req, res) => {
   const dado = req.params.dado;
   if(dado.length == 36) {
     const userInfo = await database.buscarUsuarioID(userID);
     return res.json(userInfo);
-  } else{
+  } else {
     const tokenValido = jwt.verify(token, 'segredo-do-jwt')
     return res.json(tokenValido);
   }
-});
+}); */
 
 app.put('/usuarios/:id', async (req, res) => {
   const { userID, musicasUsuario } = req.body;
