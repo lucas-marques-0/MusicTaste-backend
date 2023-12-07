@@ -72,27 +72,13 @@ app.post('/usuarios/:id', async (req, res) => {
   const { token } = req.body;
   if (!token) return res.status(401).json({ message: 'Não achou o token.' })
 
-  const decodedToken = jwt.verify(token, 'segredo-do-jwt');
-  if (!decodedToken) return res.status(404).json({ message: 'Token inválido.' })
+  const verifyToken = jwt.verify(token, 'segredo-do-jwt');
+  if (!verifyToken) return res.status(404).json({ message: 'Token inválido.' })
 
-  const userInfo = await database.buscarUsuarioID(decodedToken.id);
+  const userID = req.params.id;
+  const userInfo = await database.buscarUsuarioID(userID);
   return res.json(userInfo);
-
-  //const userID = req.params.id;
-  //const userInfo = await database.buscarUsuarioID(userID);
-  //return res.json(userInfo);
 });
-
-/* app.get('/usuarios/:dado', async (req, res) => {
-  const dado = req.params.dado;
-  if(dado.length == 36) {
-    const userInfo = await database.buscarUsuarioID(userID);
-    return res.json(userInfo);
-  } else {
-    const tokenValido = jwt.verify(token, 'segredo-do-jwt')
-    return res.json(tokenValido);
-  }
-}); */
 
 app.put('/usuarios/:id', async (req, res) => {
   const { userID, musicasUsuario } = req.body;
