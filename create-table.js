@@ -7,7 +7,7 @@ import { sql } from "./db.js";
         email TEXT,
         password TEXT,
         avatar TEXT,
-        musicas JSONB[]   
+        musicas JSON[]   
     )`.then(() => console.log('Tabela criada!')) 
 
 
