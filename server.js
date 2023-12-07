@@ -72,10 +72,19 @@ app.get('/usuarios', async (req, res) => {
   return res.json(userObjects);
 });
 
-app.get('/usuarios/:id', authenticateToken, async (req, res) => {
-  const userID = req.params.id;
-  const userInfo = await database.buscarUsuarioID(userID);
+app.post('/usuarios/:id', authenticateToken, async (req, res) => {
+  const { token } = req.body;
+  if (!token) return res.status(401).json({ message: 'Não achou o token.' })
+
+  const user = verifyToken(token);
+  if (!user) return res.status(404).json({ message: 'Unauthorized: invalid token.' })
+
+  const userInfo = await database.buscarUsuarioID(decodedToken.id);
   return res.json(userInfo);
+
+  //const userID = req.params.id;
+  //const userInfo = await database.buscarUsuarioID(userID);
+  //return res.json(userInfo);
 });
 
 /* app.get('/usuarios/:dado', async (req, res) => {
