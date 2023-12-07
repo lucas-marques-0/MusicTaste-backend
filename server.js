@@ -25,11 +25,7 @@ const authenticateToken = (req, res, next) => {
   next();
 }
 
-async function verifyToken(token) {
-  const decodedToken = jwt.verify(token, 'segredo-do-jwt');
-  const user = await database.buscarUsuarioID(decodedToken.id);
-  return user;
-}
+
 
 
 app.post('/usuarios', async (req, res) => {
@@ -79,8 +75,8 @@ app.post('/usuarios/:id', async (req, res) => {
   const decodedToken = jwt.verify(token, 'segredo-do-jwt');
   if (!decodedToken) return res.status(404).json({ message: 'Token inválido.' })
 
-  //const userInfo = await database.buscarUsuarioID(decodedToken.id);
-  return res.json(decodedToken);
+  const userInfo = await database.buscarUsuarioID(decodedToken.id);
+  return res.json(userInfo);
 
   //const userID = req.params.id;
   //const userInfo = await database.buscarUsuarioID(userID);
