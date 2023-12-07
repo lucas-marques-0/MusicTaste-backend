@@ -65,8 +65,8 @@ app.get('/usuarios', async (req, res) => {
 
 app.post('/usuarios/:id', authenticateToken, async (req, res) => {
   const userID = req.params.id;
-  const userInfo = await database.buscarUsuarioID(userID);
-  return res.status(201).json({ userInfo });
+  const userInfos = await database.buscarUsuarioID(userID);
+  return res.status(201).json({ userInfos });
 });
 
 app.put('/usuarios/:id', async (req, res) => {
