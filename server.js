@@ -25,9 +25,9 @@ const authenticateToken = (req, res, next) => {
   next();
 }
 
-function verifyToken(token) {
+async function verifyToken(token) {
   const decodedToken = jwt.verify(token, 'segredo-do-jwt');
-  const user = database.buscarUsuarioID(decodedToken.id);
+  const user = await database.buscarUsuarioID(decodedToken.id);
   return user;
 }
 
@@ -77,10 +77,10 @@ app.post('/usuarios/:id', async (req, res) => {
   if (!token) return res.status(401).json({ message: 'Não achou o token.' })
 
   const user = verifyToken(token);
-  if (!user) return res.status(404).json({ message: 'Unauthorized: invalid token.' })
+  if (!user) return res.status(404).json({ message: 'Token inválido.' })
 
-  const userInfo = await database.buscarUsuarioID(decodedToken.id);
-  return res.json(userInfo);
+  //const userInfo = await database.buscarUsuarioID(decodedToken.id);
+  return res.json(user);
 
   //const userID = req.params.id;
   //const userInfo = await database.buscarUsuarioID(userID);
