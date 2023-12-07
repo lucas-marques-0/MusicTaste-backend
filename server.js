@@ -74,7 +74,8 @@ app.post('/usuarios/:id', async (req, res) => {
 
   const userID = req.params.id;
   const userInfo = await database.buscarUsuarioID(userID);
-  return res.json(userInfo);
+  //return res.json(userInfo);
+  return res.status(201).json({ userInfo, token: token });
 });
 
 app.put('/usuarios/:id', async (req, res) => {
