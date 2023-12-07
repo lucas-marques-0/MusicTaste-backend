@@ -71,11 +71,10 @@ app.post('/usuarios/:id', async (req, res) => {
 
   const verifyToken = jwt.verify(token, 'segredo-do-jwt');
   if (!verifyToken) return res.status(404).json({ message: 'Token inválido.' })
-  const verifyTokenTeste = jwt.verify(123, 'segredo-do-jwt');
 
   const userID = req.params.id;
   const userInfo = await database.buscarUsuarioID(userID);
-  return res.status(201).json({ userInfo, token: token, tokenValido: verifyToken, teste: verifyTokenTeste });
+  return res.status(201).json({ userInfo, token: token, tokenValido: verifyToken });
 });
 
 app.put('/usuarios/:id', async (req, res) => {
