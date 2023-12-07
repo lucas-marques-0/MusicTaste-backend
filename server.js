@@ -25,9 +25,6 @@ const authenticateToken = (req, res, next) => {
   next();
 }
 
-
-
-
 app.post('/usuarios', async (req, res) => {
   const { action } = req.body;
   if (action === 'cadastro') {
@@ -77,7 +74,7 @@ app.post('/usuarios/:id', async (req, res) => {
 
   const userID = req.params.id;
   const userInfo = await database.buscarUsuarioID(userID);
-  return res.json(userInfo);
+  return res.json(userInfo, verifyToken);
 });
 
 app.put('/usuarios/:id', async (req, res) => {
