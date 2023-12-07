@@ -16,7 +16,7 @@ app.use(express.json());
 const authenticateToken = (req, res, next) => {
   const token = req.body.token
   
-  if (!token) return res.status(401).json({ message: 'Não achou o token.', token: token })
+  if (!token) return res.status(401).json({ message: 'Não achou o token.' })
 
   const user = verifyToken(token);
   if (!user) return res.status(404).json({ message: 'Unauthorized: invalid token.' })
