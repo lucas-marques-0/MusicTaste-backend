@@ -42,7 +42,7 @@ app.post('/usuarios', async (req, res) => {
     const userPassword = userInfo[0].password;
     if (userPassword === password) {
       const token = jwt.sign({ id: userInfo.id, email: userInfo.email }, 'segredo-do-jwt', {
-        expiresIn: 60,
+        expiresIn: '1d',
       });
       const userObject = { ...userInfo[0], password: undefined };
       return res.status(201).json({ token, user: userObject });
@@ -51,8 +51,6 @@ app.post('/usuarios', async (req, res) => {
     }
   }
 });
-
-// ----------
 
 app.get('/usuarios', async (req, res) => {
   const users = await database.buscarUsuarios();
@@ -69,7 +67,7 @@ app.post('/usuarios/:id', authenticateToken, async (req, res) => {
   return res.status(201).json({ userInfos });
 });
 
-app.put('/usuarios/:id', async (req, res) => {
+app.put('/usuarios/:id', authenticateToken, async (req, res) => {
   const { userID, musicasUsuario } = req.body;
   await database.atualizarMusicasUsuario(userID, musicasUsuario);
   return res.status(201).send();
