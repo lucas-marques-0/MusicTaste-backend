@@ -67,13 +67,13 @@ app.get('/usuarios', async (req, res) => {
 
 app.post('/usuarios/:id', async (req, res) => {
   const { token } = req.body;
-  if (!token) return res.status(401).json({ message: 'Não achou o token.' })
+  if (token) return res.status(401).json({ message: 'Não achou o token.' })
 
   const verifyToken = jwt.verify(token, 'segredo-do-jwt');
   if (!verifyToken) return res.status(404).json({ message: 'Token inválido.' })
 
-  //const userID = req.params.id;
-  const userInfo = await database.buscarUsuarioID(verifyToken.id);
+  const userID = req.params.id;
+  const userInfo = await database.buscarUsuarioID(userID);
   return res.json(userInfo, verifyToken);
 });
 
