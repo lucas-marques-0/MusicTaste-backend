@@ -48,6 +48,8 @@ app.post('/usuarios', async (req, res) => {
   }
 });
 
+// -------
+
 app.get('/usuarios', async (req, res) => {
   const users = await database.buscarUsuarios();
   const userObjects = users.map((user) => {
@@ -57,10 +59,15 @@ app.get('/usuarios', async (req, res) => {
   return res.json(userObjects);
 });
 
-app.get('/usuarios/:id', async (req, res) => {
-  const userID = req.params.id;
-  const userInfo = await database.buscarUsuarioID(userID);
-  return res.json(userInfo);
+app.get('/usuarios/:dado', async (req, res) => {
+  const dado = req.params.dado;
+  if(dado.length == 36) {
+    const userInfo = await database.buscarUsuarioID(userID);
+    return res.json(userInfo);
+  } else{
+    const tokenValido = jwt.verify(token, 'segredo-do-jwt')
+    return res.json(tokenValido);
+  }
 });
 
 app.put('/usuarios/:id', async (req, res) => {
