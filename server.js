@@ -64,8 +64,7 @@ app.get('/usuarios', async (req, res) => {
 app.post('/usuarios/:id', authenticateToken, async (req, res) => {
   const userID = req.params.id;
   const userInfos = await database.buscarUsuarioID(userID);
-  const userObject = { ...userInfos[0], password: undefined };
-  return res.status(201).json({ userObject });
+  return res.status(201).json({ userInfos });
 });
 
 app.put('/usuarios/:id', authenticateToken, async (req, res) => {
