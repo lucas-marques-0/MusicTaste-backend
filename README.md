@@ -12,7 +12,7 @@
 
 ![i2](https://github.com/lucas-marques-0/MusicTaste-frontend/assets/111307314/ea98392c-8d64-4d0c-8d2f-0041886fd482)
 
-<h2>Você também pode ver o que os seus amigos andam escutando!</h2>
+<h2>Veja o que os seus amigos andam escutando e descubra novas músicas!</h2>
 
 ![i5](https://github.com/lucas-marques-0/MusicTaste-frontend/assets/111307314/2cdf40cf-089d-4a9f-8756-82bdc4f5bb9c)
 
