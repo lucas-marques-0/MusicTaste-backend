@@ -1,4 +1,4 @@
-<h1>Bem Vindo ao MusicTaste :)</h1>
+<h1>Bem Vindo(a) ao MusicTaste :)</h1>
 
 ![i6](https://github.com/lucas-marques-0/MusicTaste-backend/assets/111307314/7e86be01-39b0-450a-8993-22ffbaf5fb22)
 
