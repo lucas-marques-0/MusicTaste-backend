@@ -1,6 +1,6 @@
 <h1>Bem Vindo ao MusicTaste :)</h1>
 
-![i1](https://github.com/lucas-marques-0/MusicTaste-frontend/assets/111307314/e8c8fd48-75b8-41cf-af53-93f328589770)
+![i6](https://github.com/lucas-marques-0/MusicTaste-backend/assets/111307314/7e86be01-39b0-450a-8993-22ffbaf5fb22)
 
 <h2>Aqui você pode compartilhar o seu gosto musical com seus amigos!</h2>
 
